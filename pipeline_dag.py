@@ -3,7 +3,7 @@ import os
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators import (StageToRedshiftOperator, LoadFactOperator,
-                                LoadDimensionOperator, DataQualityOperator)
+                                LoadDimensionOperator, DataQualityOperator, PostgresOperator)
 from helpers import SqlQueries
 
 # AWS_KEY = os.environ.get('AWS_KEY')
@@ -48,6 +48,14 @@ stage_songs_to_redshift = StageToRedshiftOperator(
     s3_bucket="udacity-dend",
     s3_key="song_data/A/A/*.json",
     json_path = "auto"
+)
+
+#needs to be run only once
+create_tables_task = PostgresOperator(
+    task_id="create_tables",
+    dag=dag,
+    sql=SqlQueries.'create_tables.sql',
+    postgres_conn_id="redshift"
 )
 
 load_songplays_table = LoadFactOperator(
