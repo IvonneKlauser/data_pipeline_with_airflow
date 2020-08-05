@@ -60,7 +60,9 @@ create_tables_task = PostgresOperator(
 
 load_songplays_table = LoadFactOperator(
     task_id='Load_songplays_fact_table',
-    dag=dag
+    dag=dag,
+    sql_statement = SqlQueries.songplay_table_insert,
+    target_table="songplays"
 )
 
 load_user_dimension_table = LoadDimensionOperator(
