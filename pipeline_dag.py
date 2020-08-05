@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators import (StageToRedshiftOperator, LoadFactOperator,
                                 LoadDimensionOperator, DataQualityOperator, PostgresOperator)
-from helpers import SqlQueries
+from helpers import SqlQueries, create_tables
 
 # AWS_KEY = os.environ.get('AWS_KEY')
 # AWS_SECRET = os.environ.get('AWS_SECRET')
@@ -69,7 +69,7 @@ load_user_dimension_table = LoadDimensionOperator(
     task_id='Load_user_dim_table',
     dag=dag,
     sql_statement=SqlQueries.user_table_insert,
-    target_table="user",
+    target_table="users",
     truncate=True
 )
 
@@ -77,7 +77,7 @@ load_song_dimension_table = LoadDimensionOperator(
     task_id='Load_user_dim_table',
     dag=dag,
     sql_statement=SqlQueries.song_table_insert,
-    target_table="song",
+    target_table="songs",
     truncate=True
 )
 
@@ -85,7 +85,7 @@ load_artist_dimension_table = LoadDimensionOperator(
     task_id='Load_user_dim_table',
     dag=dag,
     sql_statement=SqlQueries.artist_table_insert,
-    target_table="artist",
+    target_table="artists",
     truncate=True
 )
 
