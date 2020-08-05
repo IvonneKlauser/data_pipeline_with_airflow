@@ -67,3 +67,28 @@ class SqlQueries:
     truncate_table = ("""
         TRUNCATE {}
     """)
+    
+    count_null_songs_table = ("""
+        SELECT count(*)
+        FROM songs
+        WHERE songid is null
+    """)
+    
+    count_null_users_table = ("""
+        SELECT count(*)
+        FROM users
+        WHERE userid is null
+    """)
+    
+    count_null_artists_table = ("""
+        SELECT count(*)
+        FROM artists
+        WHERE artistid is null
+    """)
+    
+    count_null_time_table = ("""
+        SELECT count(*)
+        FROM time
+        WHERE start_time is null
+    """)
+    
