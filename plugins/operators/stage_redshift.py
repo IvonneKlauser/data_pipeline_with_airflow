@@ -18,6 +18,7 @@ class StageToRedshiftOperator(BaseOperator):
             #copy_options=tuple(),
             autocommit=False,
             parameters=None,
+            json_path,
             *args, **kwargs):
         super(S3ToRedshiftTransfer, self).__init__(*args, **kwargs)
         #self.schema = schema
@@ -30,20 +31,22 @@ class StageToRedshiftOperator(BaseOperator):
         #self.copy_options = copy_options
         self.autocommit = autocommit
         self.parameters = parameters
-
+        self.json_path = json_path
     def execute(self, context):
+        #check if file format is json, else raise error that only json is supported
         self.log.info('StageToRedshiftOperator start')
         self.hook = PostgresHook(postgres_conn_id=self.redshift_conn_id)
         self.s3 = S3Hook(aws_conn_id=self.aws_conn_id, verify=self.verify)
         credentials = self.s3.get_credentials()
         #copy_options = '\n\t\t\t'.join(self.copy_options)
-
+        
+        #add json path to ensure that data is copied even if column names are not lower case
         copy_query = """
             COPY {table}
             FROM 's3://{s3_bucket}/{s3_key}/{table}'
             with credentials
             'aws_access_key_id={access_key};aws_secret_access_key={secret_key}'
-            FORMAT AS JSON 'auto'
+            FORMAT AS JSON {json_path}
             compupdate off region 'us-west-2'
             TIMEFORMAT AS 'epochmillisecs';
         """.format(
@@ -54,6 +57,7 @@ class StageToRedshiftOperator(BaseOperator):
                    access_key=credentials.access_key,
                    secret_key=credentials.secret_key,
                    #copy_options=copy_options
+                   json_path=self.json_path
                   )
 
         self.log.info('Executing COPY command...')

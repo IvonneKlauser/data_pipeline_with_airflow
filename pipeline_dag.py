@@ -21,6 +21,7 @@ default_args = {
 
 dag = DAG('udac_example_dag',
           default_args=default_args,
+          max_active_runs=1,
           description='Load and transform data in Redshift with Airflow',
           schedule_interval='0 * * * *'
         )
@@ -34,7 +35,8 @@ stage_events_to_redshift = StageToRedshiftOperator(
     aws_credentials_id="aws_credentials",
     redshift_conn_id="redshift",
     s3_bucket="udacity-dend",
-    s3_key = "og_data/2018/11/*"
+    s3_key = "log_data/2018/11/*",
+    json_path="s3://udacity-dend/log_json_path.json"
 )
 
 stage_songs_to_redshift = StageToRedshiftOperator(
@@ -44,7 +46,8 @@ stage_songs_to_redshift = StageToRedshiftOperator(
     aws_credentials_id="aws_credentials",
     redshift_conn_id="redshift",
     s3_bucket="udacity-dend",
-    s3_key="song_data/A/A/*.json"
+    s3_key="song_data/A/A/*.json",
+    json_path = "auto"
 )
 
 load_songplays_table = LoadFactOperator(
