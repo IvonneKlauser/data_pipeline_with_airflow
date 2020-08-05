@@ -67,22 +67,34 @@ load_songplays_table = LoadFactOperator(
 
 load_user_dimension_table = LoadDimensionOperator(
     task_id='Load_user_dim_table',
-    dag=dag
+    dag=dag,
+    sql_statement=SqlQueries.user_table_insert,
+    target_table="user",
+    truncate=True
 )
 
 load_song_dimension_table = LoadDimensionOperator(
-    task_id='Load_song_dim_table',
-    dag=dag
+    task_id='Load_user_dim_table',
+    dag=dag,
+    sql_statement=SqlQueries.song_table_insert,
+    target_table="song",
+    truncate=True
 )
 
 load_artist_dimension_table = LoadDimensionOperator(
-    task_id='Load_artist_dim_table',
-    dag=dag
+    task_id='Load_user_dim_table',
+    dag=dag,
+    sql_statement=SqlQueries.artist_table_insert,
+    target_table="artist",
+    truncate=True
 )
 
 load_time_dimension_table = LoadDimensionOperator(
-    task_id='Load_time_dim_table',
-    dag=dag
+    task_id='Load_user_dim_table',
+    dag=dag,
+    sql_statement=SqlQueries.time_table_insert,
+    target_table="time",
+    truncate=True
 )
 
 run_quality_checks = DataQualityOperator(
