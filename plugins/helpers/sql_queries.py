@@ -1,7 +1,6 @@
 class SqlQueries:
    
     songplay_table_insert = ("""
-        INSERT INTO songplays (playid, start_time, userid, level, songid, artistid, sessionid, location, user_agent)
         SELECT
                 md5(events.sessionid || events.start_time) playid,
                 events.start_time, 
@@ -22,7 +21,6 @@ class SqlQueries:
     """)
 
     user_table_insert = ("""
-        INSERT INTO users (userid, first_name, last_name, gender, level)
         SELECT  distinct userid
                 , firstname AS first_name
                 , lastname AS last_name
@@ -33,7 +31,6 @@ class SqlQueries:
     """)
 
     song_table_insert = ("""
-        INSERT INTO songs (songid, title, artistid, year, duration)
         SELECT  distinct song_id AS songid
                 , title
                 , artist_id AS artistid
@@ -43,7 +40,6 @@ class SqlQueries:
     """)
 
     artist_table_insert = ("""
-        INSERT INTO artists (artistid, name, location, latitude, longitude)
         SELECT  distinct artist_id AS artistid
                 , artist_name AS name
                 , artist_location AS location
@@ -53,7 +49,6 @@ class SqlQueries:
     """)
 
     time_table_insert = ("""
-        INSERT INTO time (start_time, hour, day, week, month, year, weekday)
         SELECT  start_time
                 , extract(hour from start_time) AS hour
                 , extract(day from start_time) AS day
