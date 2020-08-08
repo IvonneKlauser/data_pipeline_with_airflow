@@ -78,7 +78,7 @@ CREATE TABLE public.time (
 	week int4 NOT NULL,
 	month int4 NOT NULL,
 	year int4 NOT NULL,
-	weekday int4 NOT NULL,
+	weekday int4 NOT NULL
 );
 
 
