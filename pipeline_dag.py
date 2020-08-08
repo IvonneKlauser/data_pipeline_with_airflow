@@ -3,14 +3,14 @@ import os
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators import (StageToRedshiftOperator, LoadFactOperator,
-                                LoadDimensionOperator, DataQualityOperator, PostgresOperator)
-from helpers import SqlQueries, create_tables
+                                LoadDimensionOperator, DataQualityOperator)
+from helpers import SqlQueries
 
 # AWS_KEY = os.environ.get('AWS_KEY')
 # AWS_SECRET = os.environ.get('AWS_SECRET')
 
 default_args = {
-    'owner': 'udacity',
+    'owner': 'sparkify',
     'start_date': datetime(2019, 1, 12),
     'depends_on_past': False,
     'retries': 3,
@@ -23,7 +23,7 @@ dag = DAG('udac_example_dag',
           default_args=default_args,
           max_active_runs=1,
           description='Load and transform data in Redshift with Airflow',
-          schedule_interval='0 * * * *'
+          schedule_interval='@hourly'
         )
 
 start_operator = DummyOperator(task_id='Begin_execution',  dag=dag)
@@ -35,7 +35,7 @@ stage_events_to_redshift = StageToRedshiftOperator(
     aws_credentials_id="aws_credentials",
     redshift_conn_id="redshift",
     s3_bucket="udacity-dend",
-    s3_key = "log_data/2018/11/*",
+    s3_key = "log_data",
     json_path="s3://udacity-dend/log_json_path.json"
 )
 
@@ -46,16 +46,8 @@ stage_songs_to_redshift = StageToRedshiftOperator(
     aws_credentials_id="aws_credentials",
     redshift_conn_id="redshift",
     s3_bucket="udacity-dend",
-    s3_key="song_data/A/A/*.json",
+    s3_key="song_data",
     json_path = "auto"
-)
-
-#needs to be run only once
-create_tables_task = PostgresOperator(
-    task_id="create_tables",
-    dag=dag,
-    sql=SqlQueries.'create_tables.sql',
-    postgres_conn_id="redshift"
 )
 
 load_songplays_table = LoadFactOperator(
@@ -74,7 +66,7 @@ load_user_dimension_table = LoadDimensionOperator(
 )
 
 load_song_dimension_table = LoadDimensionOperator(
-    task_id='Load_user_dim_table',
+    task_id='Load_song_dim_table',
     dag=dag,
     sql_statement=SqlQueries.song_table_insert,
     target_table="songs",
@@ -82,7 +74,7 @@ load_song_dimension_table = LoadDimensionOperator(
 )
 
 load_artist_dimension_table = LoadDimensionOperator(
-    task_id='Load_user_dim_table',
+    task_id='Load_artist_dim_table',
     dag=dag,
     sql_statement=SqlQueries.artist_table_insert,
     target_table="artists",
@@ -90,7 +82,7 @@ load_artist_dimension_table = LoadDimensionOperator(
 )
 
 load_time_dimension_table = LoadDimensionOperator(
-    task_id='Load_user_dim_table',
+    task_id='Load_time_dim_table',
     dag=dag,
     sql_statement=SqlQueries.time_table_insert,
     target_table="time",
