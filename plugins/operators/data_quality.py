@@ -8,7 +8,7 @@ class DataQualityOperator(BaseOperator):
 
     @apply_defaults
     def __init__(self,
-                 redshift_conn_id='redshift',
+                 redshift_conn_id="redshift",
                  sql_statement = [],
                  *args, **kwargs):
 
@@ -21,8 +21,8 @@ class DataQualityOperator(BaseOperator):
         redshift_hook = PostgresHook(self.redshift_conn_id)
         for (sql_statement, expected_result) in self.sql_statement:
             count = redshift_hook.run(sql_statement)
-                if (count != expected_result):
-                    raise ValueError(f"Data quality check failed for sql statement {sql_statement} with expected result {expected_result}")
-                    self.log.info('DataQualityOperator failed for sql statement {}'.format(sql_statement))
-                else:
-                    self.log.info('DataQualityOperator finished with statement {}'.format(sql_statement))
+            if (count != expected_result):
+                raise ValueError(f"Data quality check failed for sql statement {sql_statement} with expected result {expected_result}")
+                self.log.info('DataQualityOperator failed for sql statement {}'.format(sql_statement))
+            else:
+                self.log.info('DataQualityOperator finished with statement {}'.format(sql_statement))
