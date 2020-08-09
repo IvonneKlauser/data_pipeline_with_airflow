@@ -1,10 +1,10 @@
-### Project: Data Pipeline with Airlfow
+# Project: Data Pipeline with Airlfow
 ## Data Pipeline to manage ETL process from Amazon S3 to Amazon Redshift with Apache Airflow 
 
-# Context of the project
+## Context of the project
 Sparkify is startup that runs a new music streaming app. Their data analytics team wants to do analyses on song listening behavior to further the business. Analyses could be done to improve user experience and sales. Until now access to data was difficult due to storage in JSON file. Goal is to provide data in way that enables data analysts. Sparkify wants to load its data from S3 to Redshift using Apache Airflow for the ETL pipeline
 
-# Tables
+## Tables
 **Table songplays:**
 Records in log data associated with song plays i.e. records with page NextSong
 Fact table
@@ -28,15 +28,14 @@ Artists in music database
 Dimension table
 Information about artists can change. E.g. name or location can change
 
-# ETL pipeline
+## ETL pipeline
 1. Load data from S3 to Staging tables in Redshift using `StageToRedshiftOperator`
 2. Load data from staging tables to Fact table `songplays` using `LoadFactOperator`
 3. Load data from staging tables to Dimension tables using `LoadDimensionOperator`
 4. Perform data quality checks in Redshift comparing result from provided SQL queries to expected result
-![DAG]
-[Visualization of Airflow DAG]: DAG.png "Airflow DAG"
+![Visualization of Airflow DAG](/DAG.png)
 
-# Files in S3
+## Files in S3
 **Song dataset (as per project specifications)**
 Song data is in JSON format and contains metadata about a song and the artist of that song. The files are partitioned by the first three letters of each song's track ID
 
@@ -48,7 +47,7 @@ The log files in the dataset you'll be working with are partitioned by year and 
 **create_tables.sql**
 Create table statements for Redshift
 
-# Run the project from locally-installed Apache Airflow
+## Run the project from locally-installed Apache Airflow
 1. Create cluster (dc2.large with 2 nodes is sufficient) on Redshift allowing public access and all TCP connections on port 5439; database name: dev
 2. Create tables using sql statements in `plugins/helpers/create_tables.sql`
 3. Install Apache Airflow with S3 module
