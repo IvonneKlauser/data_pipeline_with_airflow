@@ -2,6 +2,10 @@ from airflow.hooks.postgres_hook import PostgresHook
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
+"""
+    The operator takes a list of sql statements together with the expected, runs the sql queries against redshift and logs the result
+"""
+
 class DataQualityOperator(BaseOperator):
 
     ui_color = '#89DA59'

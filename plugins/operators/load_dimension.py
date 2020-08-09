@@ -4,6 +4,10 @@ from airflow.utils.decorators import apply_defaults
 
 from helpers import SqlQueries
 
+"""
+    The operator loads the dimension table specified in target_table to redshift and gives the option to truncate the table before inserting
+"""
+
 class LoadDimensionOperator(BaseOperator):
 
     ui_color = '#80BD9E'

@@ -3,6 +3,10 @@ from airflow.hooks.S3_hook import S3Hook
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
+"""
+    This operator copies tables from specified S3 bucket to redshift with JSON path or auto formatting
+"""
+
 class StageToRedshiftOperator(BaseOperator):
     ui_color = '#358140'
 
