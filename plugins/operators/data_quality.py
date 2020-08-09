@@ -25,4 +25,4 @@ class DataQualityOperator(BaseOperator):
                 raise ValueError(f"Data quality check failed for sql statement {sql_statement} with expected result {expected_result}")
                 self.log.info('DataQualityOperator failed for sql statement {}'.format(sql_statement))
             else:
-                self.log.info('DataQualityOperator finished with statement {}'.format(sql_statement))
+                self.log.info('DataQualityOperator successfully finished with statement {}'.format(sql_statement))

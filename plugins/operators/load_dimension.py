@@ -31,5 +31,4 @@ class LoadDimensionOperator(BaseOperator):
             redshift_hook.run(SqlQueries.truncate_table.format(self.target_table))
         sql_insert = "INSERT INTO {} {}".format(self.target_table,self.sql_statement)
         redshift_hook.run(sql_insert)
-        #redshift_hook.run(self.sql_stat)
         self.log.info('LoadDimensionOperator finished with table {}'.format(self.target_table))

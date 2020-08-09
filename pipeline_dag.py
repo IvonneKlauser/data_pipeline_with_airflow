@@ -57,6 +57,7 @@ load_songplays_table = LoadFactOperator(
     target_table="songplays"
 )
 
+#if truncate=True, table is truncated before insert
 load_user_dimension_table = LoadDimensionOperator(
     task_id='Load_user_dim_table',
     dag=dag,
